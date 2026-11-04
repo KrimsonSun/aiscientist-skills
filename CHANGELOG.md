@@ -6,6 +6,15 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `literature/read-whole-corpus-with-claude` 0.0.1: answers a question from a chunked full-text
+  corpus by having Claude Haiku read every passage, ten per call, as numbered sentences, and keep
+  the sentences that bear on it (verbatim, with PMID and page). `scripts/read_corpus.py` estimates
+  the cost before a read, resumes a read that stopped, and builds a table of every HGNC gene the
+  evidence names for a gene-list question. Tested on the RetiGene corpus (39,563 passages). It
+  comes with the trigger eval `list-every-gene-from-paper-corpus`.
+
 ## [0.2.0] - 2026-11-04
 
 ### Added
