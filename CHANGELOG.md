@@ -6,6 +6,8 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-04
+
 ### Added
 
 - `single-cell/explore-atlas-expression-with-aiscientist-mcp` 0.0.1: answers a query such as "show

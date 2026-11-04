@@ -169,7 +169,7 @@ use; the commands below are the same afterwards.
 ```bash
 # without a clone, straight from GitHub (pin a tag for reproducibility)
 pip install git+https://github.com/lijinbio/aiscientist-skills.git
-pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.1.0
+pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.0
 uvx --from git+https://github.com/lijinbio/aiscientist-skills.git aiscientist-skill --help
 
 # from a clone, for contributing (pick one)
