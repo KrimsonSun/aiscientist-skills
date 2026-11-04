@@ -259,6 +259,39 @@
       "has_tests": true
     },
     {
+      "name": "explore-atlas-expression-with-aiscientist-mcp",
+      "category": "single-cell",
+      "path": "skills/single-cell/explore-atlas-expression-with-aiscientist-mcp",
+      "version": "0.0.1",
+      "status": "community",
+      "description": "Answer a gene expression query such as \"show LRAT across retinal cell types\" on a large single-cell or single-nucleus atlas .h5ad with raw counts, by calling the atlas-expression-exploration MCP server from the aiscientist-mcp repository. Its tools resolve gene names (case, HGNC alias, previous symbol, ID), run the full-atlas scanpy step on a big-memory Slurm node, and return donor-aware summary tables at major-class, cell-type and region-by-class resolution, scanpy dot, violin and UMAP feature plots, and a short Markdown report. Use when asked where a gene is expressed in an atlas, to compare a few genes across annotated cell types, to produce standard expression figures for a gene list, or to install or register this MCP server. Not a differential expression test.",
+      "tags": [
+        "scrna-seq",
+        "snrna-seq",
+        "gene-expression",
+        "mcp",
+        "scanpy",
+        "dot-plot",
+        "violin-plot",
+        "umap",
+        "cell-atlas",
+        "retina"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp common 0.0.2, atlas-expression-exploration 0.0.2 (conda) and 0.0.3 (image), mcp 2.3.0, scanpy 1.12.5, anndata 0.13.4, Python 3.13.18, Claude Code 2.1.309",
+      "author": "Jin Li",
+      "requirements": {
+        "compute": "full-atlas step: Slurm job, 4 CPUs, 300 GB requested (218 GiB peak), 10.5-12.5 min for 3.18M nuclei; plot and report calls 5-9 min each from a conda env on a network filesystem (mostly server start and imports), 9-19 s each in the image on a 40,000-nucleus subset",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "install",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
       "name": "prioritize-disease-genes-with-atlas",
       "category": "single-cell",
       "path": "skills/single-cell/prioritize-disease-genes-with-atlas",

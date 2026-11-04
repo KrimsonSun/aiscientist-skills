@@ -6,6 +6,17 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `single-cell/explore-atlas-expression-with-aiscientist-mcp` 0.0.1: answers a query such as "show
+  LRAT across retinal cell types" on a large atlas `.h5ad` by calling the
+  `atlas-expression-exploration` MCP server of
+  [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp). It covers gene-name resolution,
+  the full-atlas scanpy step on a big-memory Slurm node, donor-aware tables, scanpy dot, violin and
+  UMAP plots, and a report. The skill holds only install, registration and tool-call commands, and
+  pins release tags and the server image digest. Tested on the HRCA snRNA-seq atlas (3.18M nuclei).
+  It comes with the trigger eval `show-gene-across-retina-cell-types`.
+
 ## [0.1.0] - 2026-10-23
 
 ### Changed
