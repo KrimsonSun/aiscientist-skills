@@ -32,6 +32,7 @@
         "./skills/single-cell/compare-conditions-by-celltype",
         "./skills/single-cell/compare-two-groups-with-scanpy",
         "./skills/single-cell/crossvalidate-scgpt-vs-leiden",
+        "./skills/single-cell/explore-atlas-expression-with-aiscientist-mcp",
         "./skills/single-cell/prioritize-disease-genes-with-atlas",
         "./skills/single-cell/qc-snrna-with-cellqc-standalone",
         "./skills/single-cell/score-gene-signatures-with-scanpy"
