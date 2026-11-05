@@ -114,6 +114,39 @@
       "has_tests": true
     },
     {
+      "name": "read-whole-corpus-with-claude",
+      "category": "literature",
+      "path": "skills/literature/read-whole-corpus-with-claude",
+      "version": "0.0.1",
+      "status": "community",
+      "description": "Answer a question from a chunked full-text literature corpus completely, by having Claude Haiku read every passage (not the top-k of a search) and return the numbers of the sentences that bear on it, so every quote is verbatim. Writes evidence.csv (each bearing passage with its sentences, PMID, page and citation), a read log, measured tokens and cost, and for a gene-list question a table of every HGNC gene those sentences name. Tested on the RetiGene corpus of inherited retinal disease papers (39,563 passages). Use when a question needs every paper that reports something (every gene with a property, every study of a variant or phenotype), when a RAG or PaperQA answer built from the best 10-30 chunks may be incomplete, to check how complete such an answer is, or to estimate the cost and time of reading a corpus before running it. Not for a quick lookup of one fact.",
+      "tags": [
+        "literature",
+        "rag",
+        "corpus",
+        "full-text",
+        "evidence",
+        "claude",
+        "haploinsufficiency",
+        "retina"
+      ],
+      "license": "MIT",
+      "tested_with": "anthropic 1.13.0 (Python SDK), claude-haiku-5-5 at effort medium, Python 3.13.3",
+      "author": "Yijun Sun",
+      "requirements": {
+        "compute": "whole RetiGene corpus (39,563 passages, one question): 4,012 calls, 408 s with 48 parallel calls, $5.31 (Claude Haiku 5.5 at $0.10 / $0.50 per million input / output tokens); a 3,270-passage sample: 327 calls, 42 s, $0.47; estimate and gene table: seconds on one CPU",
+        "gpu": false,
+        "scheduler": "none",
+        "network": "runtime",
+        "secrets": [
+          "ANTHROPIC_API_KEY"
+        ],
+        "allowed_tools": ""
+      },
+      "has_code": true,
+      "has_tests": true
+    },
+    {
       "name": "recover-paper-pdfs",
       "category": "literature",
       "path": "skills/literature/recover-paper-pdfs",
