@@ -49,6 +49,7 @@ Scientific literature: recovering, verifying and assembling full-text paper corp
 
 | Skill | Status | Version | What it does |
 | --- | --- | --- | --- |
+| [`query-retigene-papers-with-aiscientist-mcp`](skills/literature/query-retigene-papers-with-aiscientist-mcp/) | ⚪ community | 0.0.1 | Answer a question about the RetiGene papers (about 1,700 full-text papers on inherited retinal disease), such as "What are haploinsufficient genes in RetiGene papers?", by calling the retigene-rag MCP server from the aiscientist-mcp repository. |
 | [`read-whole-corpus-with-claude`](skills/literature/read-whole-corpus-with-claude/) | ⚪ community | 0.0.1 | Answer a question from a chunked full-text literature corpus completely, by having Claude Haiku read every passage (not the top-k of a search) and return the numbers of the sentences that bear on it, so every quote is verbatim. |
 | [`recover-paper-pdfs`](skills/literature/recover-paper-pdfs/) | ⚪ community | 1.0.0 | Recover and assemble a corpus of scientific paper PDFs from a list of PMIDs or DOIs through a ladder of legal sources (open-access APIs, PMC and Europe PMC, publisher open access, then the user's institutional access through the campus network, VPN or library discovery search), verifying every PDF and tracking each paper in a manifest. |
 

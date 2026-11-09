@@ -107,6 +107,7 @@
       "homepage": "https://lijinbio.github.io/aiscientist-skills/",
       "repository": "https://github.com/lijinbio/aiscientist-skills",
       "skills": [
+        "./skills/literature/query-retigene-papers-with-aiscientist-mcp",
         "./skills/literature/read-whole-corpus-with-claude",
         "./skills/literature/recover-paper-pdfs"
       ]

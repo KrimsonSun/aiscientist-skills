@@ -114,6 +114,39 @@
       "has_tests": true
     },
     {
+      "name": "query-retigene-papers-with-aiscientist-mcp",
+      "category": "literature",
+      "path": "skills/literature/query-retigene-papers-with-aiscientist-mcp",
+      "version": "0.0.1",
+      "status": "community",
+      "description": "Answer a question about the RetiGene papers (about 1,700 full-text papers on inherited retinal disease), such as \"What are haploinsufficient genes in RetiGene papers?\", by calling the retigene-rag MCP server from the aiscientist-mcp repository. Its tools search every sentence by keyword and the passages by chunk embedding, and run a corpus-wide curation that grades each gene from its own sentences (A stated, B hedged or contested, N not supported) into a gene table and a sentence table, each row with a verbatim quote, PMID and page. Use when asked which genes in the RetiGene papers have a property (haploinsufficiency, loss of one copy), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.",
+      "tags": [
+        "literature",
+        "rag",
+        "mcp",
+        "retina",
+        "inherited-retinal-disease",
+        "haploinsufficiency",
+        "gene-curation",
+        "claude"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp common 0.0.2 and retigene-rag 0.0.1 (pip, and the image of containers/retigene-rag), mcp 2.3.0, anthropic 1.13.0, Python 3.13.3, Claude Haiku 5.5 and Claude Sonnet 5.5, Claude Code 2.1.205; the RetiGene index of 2026-10-11 (1,736 papers, 426,706 sentences)",
+      "author": "Yijun Sun",
+      "requirements": {
+        "compute": "one curation: 2.5-3.5 min, 711-770 model calls, 2.2-2.4 M input and 0.45-0.49 M output tokens, $0.31-0.39 with Claude Haiku reading and reviewing ($0.78 with a Claude Sonnet review); asked again it is reused at once, and with rerun it takes 17 s from the reply cache; other calls 2-15 s each as one-shot CLI or container calls, most of it loading the corpus (about 2 GB of memory); no GPU",
+        "gpu": false,
+        "scheduler": "none",
+        "network": "runtime",
+        "secrets": [
+          "ANTHROPIC_API_KEY"
+        ],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
       "name": "read-whole-corpus-with-claude",
       "category": "literature",
       "path": "skills/literature/read-whole-corpus-with-claude",
