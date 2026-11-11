@@ -2,7 +2,7 @@
 name: query-retigene-papers-with-aiscientist-mcp
 description: Answer a question about the RetiGene papers (about 1,700 full-text papers on inherited retinal disease), such as "What are haploinsufficient genes in RetiGene papers?", by calling the retigene-rag MCP server from the aiscientist-mcp repository. Its tools search every sentence by keyword and the passages by chunk embedding, and run a corpus-wide curation that grades each gene from its own sentences (A stated, B hedged or contested, N not supported) into a gene table and a sentence table, each row with a verbatim quote, PMID and page. Use when asked which genes in the RetiGene papers have a property (haploinsufficiency, loss of one copy), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.
 license: MIT
-compatibility: Requires the aiscientist-mcp packages (common, retigene-rag) from GitHub or apptainer with the pinned server image, a copy of the RetiGene index (the AiScientist shared dataset retigene, about 440 MB), an MCP client (Claude Code or any stdio MCP client) or the bundled aiscientist-mcp CLI client, and a model, a Claude API key or an OpenAI-compatible endpoint such as a vLLM server. No GPU on the server side. Network for the model calls.
+compatibility: Requires the aiscientist-mcp packages (common, retigene-rag) or the pinned server image, a copy of the RetiGene index (the AiScientist shared dataset retigene, about 440 MB), an MCP client or the bundled CLI client, and a model set in the server's environment (a Claude key or an OpenAI-compatible endpoint; validated on Claude Haiku 5.5). The skill holds no secret. No GPU. Network for the model calls.
 metadata:
   category: literature
   version: "0.0.1"
@@ -18,13 +18,14 @@ metadata:
   requires-gpu: "false"
   scheduler: "none"
   requires-network: "runtime"
-  requires-secrets: "ANTHROPIC_API_KEY"
+  requires-secrets: "none"
 ---
 
 # Query the RetiGene papers with the retigene-rag MCP server
 
 The [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp) server `retigene-rag` exposes the
-RetiGene corpus as MCP tools. This skill holds no code: every step is a tool call.
+RetiGene corpus as MCP tools. This skill holds no code and no secret: every step is a tool call, and the
+curation reads with the model of whoever runs the server, set by the variables in step 2.
 
 - In an MCP client such as Claude Code, call the tools directly.
 - In a shell or batch script, use the bundled client:
@@ -88,7 +89,7 @@ settings as `APPTAINERENV_<name>` and bind the index and the data folder.
 | `RETIGENE_INDEX` | a version of the shared dataset `retigene` | `/path/to/datasets/retigene/v2026.11` |
 | `AISCI_DATA_DIR` | data root; curations go to `<root>/retigene-rag/<curation_id>/` | `/path/to/data/aiscientist-mcp` |
 | `AISCI_EXECUTOR` | `inline` (the call returns when the curation ends), `local` (background, for a persistent server) or `slurm` | `inline` |
-| `ANTHROPIC_API_KEY` | the Claude key (`ANTHROPIC_BASE_URL` for a proxy) | your key |
+| `ANTHROPIC_API_KEY` | your own Claude key, when the model is Claude (`ANTHROPIC_BASE_URL` for a proxy) | your key |
 | `RETIGENE_CHECK_MODEL`, `RETIGENE_REVIEW_MODEL` | the two readers | `claude-haiku-5-5`, `claude-haiku-5-5` |
 | `RETIGENE_PROVIDER`, `RETIGENE_BASE_URL`, `RETIGENE_API_KEY` | `openai` and an OpenAI-compatible endpoint instead of Claude | unset (Claude) |
 | `RETIGENE_CACHE` | model replies, reused by later curations | `<root>/retigene-rag/cache` |
@@ -172,7 +173,9 @@ Each curation folder `$AISCI_DATA_DIR/retigene-rag/<curation_id>/` holds `genes.
    `sentence_id`; `code_adjusted` says where the rules changed the review model's grade, and why.
 3. **Unresolved genes** (`unresolved`): genes whose replies could not be read are listed apart and never as
    A. `submit_curation` with `rerun=true` reads them again, the others from the cache.
-4. **Against the reference** (`evaluate`): on the haploinsufficiency question every tested run listed the 15 A genes as A (10/10 ocular, 5/5 syndromic), kept the 7 B genes apart and listed neither N gene. A genes outside the reference (ABCA4, FSCN2 every run; CLN8, FH in some) are for a curator to check: FH is factor H, the CFH protein, read as a gene.
+4. **Against the reference** (`evaluate`): on the haploinsufficiency question every tested run (Claude Haiku 5.5
+   reading) listed the 15 A genes as A (10/10 ocular, 5/5 syndromic), kept the 7 B genes apart and listed neither N gene. A genes outside the reference (ABCA4, FSCN2 every run; CLN8, FH in some) are for a curator to check: FH is factor H, the CFH protein, read as a gene. With another model, run `evaluate` before
+   relying on its list: its recall is its own.
 
 ## Report
 

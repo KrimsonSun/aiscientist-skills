@@ -138,9 +138,7 @@
         "gpu": false,
         "scheduler": "none",
         "network": "runtime",
-        "secrets": [
-          "ANTHROPIC_API_KEY"
-        ],
+        "secrets": [],
         "allowed_tools": ""
       },
       "has_code": false,

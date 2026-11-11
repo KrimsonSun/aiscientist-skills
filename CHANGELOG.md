@@ -22,7 +22,8 @@ All notable changes to this repository are documented here. The format follows
   each gene from its own sentences into a gene table and a sentence table with verbatim quotes, PMIDs
   and pages. Only install, registration and tool calls, with tested times and costs: in ten runs it
   listed the curator's 15 A genes as A, kept the 7 B genes apart and listed neither N gene, at
-  $0.31-0.39 and 2.5-3.5 min per question with Claude Haiku. It comes with the trigger eval
+  $0.31-0.39 and 2.5-3.5 min per question with Claude Haiku. It needs no secret of its own: the
+  model, and its key or endpoint, come from whoever runs the server. It comes with the trigger eval
   `list-haploinsufficient-genes-in-retigene`.
 
 ## [0.2.0] - 2026-11-04
