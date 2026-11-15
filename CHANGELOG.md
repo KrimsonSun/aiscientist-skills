@@ -6,6 +6,15 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.7] - 2026-11-15
+
+### Fixed
+
+- `single-cell/analyze-scrna-with-mcp` 0.1.4 pins scrna-analysis MCP 0.0.6
+  (`ghcr.io/lijinbio/mcp-scrna-analysis@sha256:f979615ed1ed…`), in which a bare `input` name finds
+  a checkpoint handed off by another analysis of the same run (lijinbio/aiscientist-mcp#7).
+  The scientific stack is unchanged from 0.0.5; recorded acceptance evidence refers to 0.0.5.
+
 ## [0.2.6] - 2026-11-13
 
 ### Changed

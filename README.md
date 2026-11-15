@@ -67,7 +67,7 @@ Single-cell and single-nucleus RNA-seq: QC, integration, annotation and downstre
 
 | Skill | Status | Version | What it does |
 | --- | --- | --- | --- |
-| [`analyze-scrna-with-mcp`](skills/single-cell/analyze-scrna-with-mcp/) | ⚪ community | 0.1.3 | Run QC, clustering, differential expression, enrichment and marker annotation through an already configured scrna-analysis MCP service. |
+| [`analyze-scrna-with-mcp`](skills/single-cell/analyze-scrna-with-mcp/) | ⚪ community | 0.1.4 | Run QC, clustering, differential expression, enrichment and marker annotation through an already configured scrna-analysis MCP service. |
 | [`annotate-cells-with-scgpt-mcp`](skills/single-cell/annotate-cells-with-scgpt-mcp/) | ⚪ community | 0.1.1 | Transfer cell labels from an approved reference model through an already configured scgpt-annotation MCP service. |
 | [`annotate-clusters-by-markers`](skills/single-cell/annotate-clusters-by-markers/) | ⚪ community | 1.0.0 | Reference-free cell-type annotation of clusters from a curated marker panel with scanpy. |
 | [`compare-conditions-by-celltype`](skills/single-cell/compare-conditions-by-celltype/) | ⚪ community | 1.0.0 | Condition-vs-control differential expression within each cell type (for example KO vs WT, or disease vs control, per cell type) with scanpy rank_genes_groups (Wilcoxon, explicit reference group). |
@@ -188,7 +188,7 @@ For AiScientist, run its deployment helper from the **application checkout**:
 
 ```bash
 AISCIENTIST_SKILLS_REPO=lijinbio/aiscientist-skills \
-  bash deploy/deploy_skills.sh v0.2.6
+  bash deploy/deploy_skills.sh v0.2.7
 ```
 
 Verify the bundle and `catalog.json` against the release's `SHA256SUMS`. The application also verifies its configured
@@ -242,7 +242,7 @@ use; the commands below are the same afterwards.
 ```bash
 # without a clone, straight from GitHub (pin a tag for reproducibility)
 pip install git+https://github.com/lijinbio/aiscientist-skills.git
-pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.6
+pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.7
 uvx --from git+https://github.com/lijinbio/aiscientist-skills.git aiscientist-skill --help
 
 # from a clone, for contributing (pick one)

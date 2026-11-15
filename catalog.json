@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "registry": "aiscientist-skills",
-  "registry_version": "0.2.6",
-  "generator": "aiscientist-skills 0.2.6",
+  "registry_version": "0.2.7",
+  "generator": "aiscientist-skills 0.2.7",
   "categories": [
     {
       "name": "crispr-screens",
@@ -248,7 +248,7 @@
       "name": "analyze-scrna-with-mcp",
       "category": "single-cell",
       "path": "skills/single-cell/analyze-scrna-with-mcp",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "status": "community",
       "description": "Run QC, clustering, differential expression, enrichment and marker annotation through an already configured scrna-analysis MCP service. Use for an AnnData workflow when this service is available and its checkpoints and asynchronous task results must be carried between steps; retain the existing standalone workflow when it is not registered.",
       "tags": [
@@ -256,7 +256,7 @@
         "scrna-analysis"
       ],
       "license": "MIT",
-      "tested_with": "aiscientist-mcp-scrna-analysis 0.0.5, common 0.0.4; frozen scientific Python 3.11.15 and Scanpy 1.11.5; released SIF CLI/schema/file verification and full native HPC regression passed; website acceptance is separate",
+      "tested_with": "aiscientist-mcp-scrna-analysis 0.0.5 (0.0.6 changes only bare-name checkpoint lookup, unit-tested), common 0.0.4; frozen scientific Python 3.11.15 and Scanpy 1.11.5; released SIF CLI/schema/file verification and full native HPC regression passed; website acceptance is separate",
       "author": "",
       "requirements": {
         "compute": "4 CPUs, 48 GB requested; 480 real cells x 1550 genes, 6 samples, 2 tissue regions; this is a regression subset, not full-atlas sizing",

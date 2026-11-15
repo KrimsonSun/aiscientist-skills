@@ -4,18 +4,18 @@ description: Run QC, clustering, differential expression, enrichment and marker 
 license: MIT
 metadata:
   category: single-cell
-  version: 0.1.3
+  version: 0.1.4
   status: community
   tags: mcp, scrna-analysis
-  tested-with: aiscientist-mcp-scrna-analysis 0.0.5, common 0.0.4; frozen scientific Python 3.11.15 and Scanpy 1.11.5; released SIF CLI/schema/file verification and full native HPC regression passed; website acceptance is separate
+  tested-with: aiscientist-mcp-scrna-analysis 0.0.5 (0.0.6 changes only bare-name checkpoint lookup, unit-tested), common 0.0.4; frozen scientific Python 3.11.15 and Scanpy 1.11.5; released SIF CLI/schema/file verification and full native HPC regression passed; website acceptance is separate
   compute: 4 CPUs, 48 GB requested; 480 real cells x 1550 genes, 6 samples, 2 tissue regions; this is a regression subset, not full-atlas sizing
   requires-gpu: 'false'
   scheduler: optional
   requires-network: install
   requires-secrets: none
   mcp-server: scrna-analysis
-  mcp-package-version: 0.0.5
-  image: "docker://ghcr.io/lijinbio/mcp-scrna-analysis@sha256:1c978c1540712219862c211ddf7d1410608f9461d35fa93dadf3b4ad475c9966"
+  mcp-package-version: 0.0.6
+  image: "docker://ghcr.io/lijinbio/mcp-scrna-analysis@sha256:f979615ed1ed98c61cf7a6cb1bba26fcd4076b119b17ff7d4f873647d7f43d18"
   cpus: "4"
   mem_gb: "48"
   time_limit: "01:00:00"
@@ -32,11 +32,13 @@ Read the client's actual tool inventory and advertised schemas. Tool names below
 server's native names; a host may qualify them. Do not invent a `mcp_` prefix or call an
 unregistered name. If this service is absent, keep the currently available AiScientist tools
 or the installed standalone analysis skill. This migration skill does not change their image,
-install an unpublished release, or retire the legacy path. Its image pin names the upstream `scrna-analysis-v0.0.5` release.
+install an unpublished release, or retire the legacy path. Its image pin names the upstream `scrna-analysis-v0.0.6` release.
 
 The service operator binds `SCRNA_DATASET`, `SCRNA_READ_ROOTS`, and writable `AISCI_DATA_DIR`.
 An explicit `dataset` must be admitted on the server host. Tool `input` selects a checkpoint
 inside this analysis's `work/` or `artifacts/`; it is not a general filesystem reader.
+A bare file name means `work/<name>`; from 0.0.6 it also finds a checkpoint that another
+analysis of the same run handed off through `SCRNA_CHECKPOINT_ROOT`.
 
 ## Choose the calculation
 
@@ -84,7 +86,7 @@ same newer dependency environment: 480 observed cells, 6 samples, fovea/peripher
 1,550 selected genes. That did not establish parity with the old production environment;
 a subsequent comparison found marker-score and label differences.
 
-The pinned 0.0.5 image instead freezes the deployed scientific Python 3.11.15 / Scanpy 1.11.5
+The 0.0.5 image, whose scientific stack the pinned 0.0.6 image keeps, instead freezes the deployed scientific Python 3.11.15 / Scanpy 1.11.5
 stack. The original 63 scientific packages retain their archive and installed-file provenance;
 12 additional packages are declared separately. The released SIF passed default CLI, complete
 schema and 75-package / 13,117-file verification. Local image comparisons restored marker

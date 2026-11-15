@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Tested, reproducible agent skills for scientific data analysis, used by AiScientist.",
-    "version": "0.2.6"
+    "version": "0.2.7"
   },
   "plugins": [
     {
