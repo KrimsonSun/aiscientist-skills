@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "registry": "aiscientist-skills",
-  "registry_version": "0.2.7",
-  "generator": "aiscientist-skills 0.2.7",
+  "registry_version": "0.2.8",
+  "generator": "aiscientist-skills 0.2.8",
   "categories": [
     {
       "name": "crispr-screens",
@@ -584,7 +584,7 @@
       "name": "annotate-vcf-with-mcp",
       "category": "variants",
       "path": "skills/variants/annotate-vcf-with-mcp",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "status": "community",
       "description": "Annotate an admitted VCF through an already configured variant-annotation MCP service using matching offline VEP references, then inspect complete consequence, frequency and ClinVar tables. Use for this service deployment and its asynchronous results; retain the existing VCF workflow when it is unavailable and never silently switch private variants to REST.",
       "tags": [
@@ -592,7 +592,7 @@
         "variant-annotation"
       ],
       "license": "MIT",
-      "tested_with": "aiscientist-mcp-variant-annotation 0.0.2, common 0.0.4; native MCP and deterministic VEP/bcftools regression fixtures; release-112.0 VEP image build",
+      "tested_with": "aiscientist-mcp-variant-annotation 0.0.2 (0.0.3 adds reference contigs to contig-less headers and starts SpliceAI with its env interpreter; unit-tested and patched-0.0.2 Slurm run), common 0.0.4; native MCP and deterministic VEP/bcftools regression fixtures; release-112.0 VEP image build",
       "author": "",
       "requirements": {
         "compute": "Service default: 8 CPUs, 32 GB, 8 hours; reference downloads and real callset acceptance are deployment-specific",

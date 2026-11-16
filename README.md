@@ -93,7 +93,7 @@ DNA variant analysis from VCF files: normalization, callset QC, result tables, r
 
 | Skill | Status | Version | What it does |
 | --- | --- | --- | --- |
-| [`annotate-vcf-with-mcp`](skills/variants/annotate-vcf-with-mcp/) | ⚪ community | 0.1.1 | Annotate an admitted VCF through an already configured variant-annotation MCP service using matching offline VEP references, then inspect complete consequence, frequency and ClinVar tables. |
+| [`annotate-vcf-with-mcp`](skills/variants/annotate-vcf-with-mcp/) | ⚪ community | 0.1.2 | Annotate an admitted VCF through an already configured variant-annotation MCP service using matching offline VEP references, then inspect complete consequence, frequency and ClinVar tables. |
 | [`build-variant-db-with-tiledbvcf`](skills/variants/build-variant-db-with-tiledbvcf/) | ⚪ community | 1.0.0 | Build and query a TileDB-VCF variant database for a cohort with tiledbvcf-py - ingest many indexed single-sample VCFs into one compressed sparse-array dataset (a re-run adds only new samples, with no re-merging), query genomic regions across all or selected samples, and export the matching records (sample, contig, position, alleles, genotype) to a TSV with per-sample counts. |
 | [`normalize-vcf-with-bcftools`](skills/variants/normalize-vcf-with-bcftools/) | ⚪ community | 1.0.0 | Normalize a VCF with bcftools norm before annotation or ClinVar/gnomAD matching - split multiallelic sites into biallelic records, atomize MNPs into SNPs, then left-align and trim indels against the reference FASTA of the same build - writing an indexed normalized.vcf.gz and a JSON of record counts before and after. |
 | [`prioritize-clinical-variants`](skills/variants/prioritize-clinical-variants/) | ⚪ community | 1.0.0 | Rank annotated variants into research-triage tiers (ClinVar pathogenic, likely pathogenic, VUS favouring pathogenic, VUS, likely benign, benign) from ClinVar significance used verbatim, gnomAD allele frequency against a dominant or recessive disease-model cutoff and the ACMG BA1 5 percent rule, and in-silico predictors (SIFT, PolyPhen, REVEL, CADD, AlphaMissense) as supporting evidence only. |
@@ -188,7 +188,7 @@ For AiScientist, run its deployment helper from the **application checkout**:
 
 ```bash
 AISCIENTIST_SKILLS_REPO=lijinbio/aiscientist-skills \
-  bash deploy/deploy_skills.sh v0.2.7
+  bash deploy/deploy_skills.sh v0.2.8
 ```
 
 Verify the bundle and `catalog.json` against the release's `SHA256SUMS`. The application also verifies its configured
@@ -242,7 +242,7 @@ use; the commands below are the same afterwards.
 ```bash
 # without a clone, straight from GitHub (pin a tag for reproducibility)
 pip install git+https://github.com/lijinbio/aiscientist-skills.git
-pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.7
+pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.8
 uvx --from git+https://github.com/lijinbio/aiscientist-skills.git aiscientist-skill --help
 
 # from a clone, for contributing (pick one)

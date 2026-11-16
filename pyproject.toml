@@ -1,6 +1,6 @@
 [project]
 name = "aiscientist-skills"
-version = "0.2.7"
+version = "0.2.8"
 description = "Registry tooling for AiScientist agent skills: scaffold, validate, catalog, review and package."
 readme = "README.md"
 license = "MIT"

@@ -6,6 +6,15 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.8] - 2026-11-16
+
+### Fixed
+
+- `variants/annotate-vcf-with-mcp` 0.1.2 pins variant-annotation MCP 0.0.3
+  (`ghcr.io/lijinbio/mcp-variant-annotation@sha256:b013f4fcd951…`): a VCF without `##contig` lines is
+  normalized after taking the reference's contigs, and SpliceAI starts from an environment
+  reached at another path (lijinbio/aiscientist-mcp#9). Recorded acceptance evidence refers to 0.0.2.
+
 ## [0.2.7] - 2026-11-15
 
 ### Fixed

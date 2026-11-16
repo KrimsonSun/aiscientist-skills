@@ -4,18 +4,18 @@ description: Annotate an admitted VCF through an already configured variant-anno
 license: MIT
 metadata:
   category: variants
-  version: 0.1.1
+  version: 0.1.2
   status: community
   tags: mcp, variant-annotation
-  tested-with: aiscientist-mcp-variant-annotation 0.0.2, common 0.0.4; native MCP and deterministic VEP/bcftools regression fixtures; release-112.0 VEP image build
+  tested-with: aiscientist-mcp-variant-annotation 0.0.2 (0.0.3 adds reference contigs to contig-less headers and starts SpliceAI with its env interpreter; unit-tested and patched-0.0.2 Slurm run), common 0.0.4; native MCP and deterministic VEP/bcftools regression fixtures; release-112.0 VEP image build
   compute: 'Service default: 8 CPUs, 32 GB, 8 hours; reference downloads and real callset acceptance are deployment-specific'
   requires-gpu: 'false'
   scheduler: optional
   requires-network: runtime
   requires-secrets: none
   mcp-server: variant-annotation
-  mcp-package-version: 0.0.2
-  image: "docker://ghcr.io/lijinbio/mcp-variant-annotation@sha256:a1861a81a36d154021ce5a283f11fa557e4756ac750cfce90dc57827a49bd2b6"
+  mcp-package-version: 0.0.3
+  image: "docker://ghcr.io/lijinbio/mcp-variant-annotation@sha256:b013f4fcd9511e5cf48557d4ea32d0855e14e53da1b0ce1db2015a22750306f3"
   cpus: "4"
   mem_gb: "16"
   time_limit: "01:00:00"
@@ -39,6 +39,9 @@ The default assembly is GRCh38, not an inference from every input. Confirm the r
 match VEP cache, FASTA and ClinVar releases. The offline server supports human annotation;
 licensed/optional predictor assets are separately staged by the operator. Do not claim CADD,
 REVEL, AlphaMissense, SpliceAI or another layer ran merely because its columns exist.
+Check the result's `spliceai.ran`. From 0.0.3, a VCF header without `##contig` lines gets the
+reference's contigs (from its `.fai`) before normalization; contig names must still match the
+reference (`chr1` versus `1` is not reconciled).
 
 ## Preserve the execution and privacy choice
 
