@@ -6,6 +6,8 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.9] - 2026-11-16
+
 ### Added
 
 - `literature/query-retigene-papers-with-aiscientist-mcp` 0.0.1: answers a question about inherited

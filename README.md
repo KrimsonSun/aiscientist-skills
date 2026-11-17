@@ -189,7 +189,7 @@ For AiScientist, run its deployment helper from the **application checkout**:
 
 ```bash
 AISCIENTIST_SKILLS_REPO=lijinbio/aiscientist-skills \
-  bash deploy/deploy_skills.sh v0.2.8
+  bash deploy/deploy_skills.sh v0.2.9
 ```
 
 Verify the bundle and `catalog.json` against the release's `SHA256SUMS`. The application also verifies its configured
@@ -243,7 +243,7 @@ use; the commands below are the same afterwards.
 ```bash
 # without a clone, straight from GitHub (pin a tag for reproducibility)
 pip install git+https://github.com/lijinbio/aiscientist-skills.git
-pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.8
+pipx install git+https://github.com/lijinbio/aiscientist-skills.git@v0.2.9
 uvx --from git+https://github.com/lijinbio/aiscientist-skills.git aiscientist-skill --help
 
 # from a clone, for contributing (pick one)

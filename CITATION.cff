@@ -10,7 +10,7 @@ authors:
 license: MIT
 repository-code: https://github.com/lijinbio/aiscientist-skills
 url: https://lijinbio.github.io/aiscientist-skills/
-version: 0.2.8
+version: 0.2.9
 date-released: "2026-11-16"
 keywords:
   - agent skills
