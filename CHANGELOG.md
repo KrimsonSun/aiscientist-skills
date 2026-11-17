@@ -6,6 +6,20 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `literature/query-retigene-papers-with-aiscientist-mcp` 0.0.1: answers a question about inherited
+  retinal disease genes by calling the `retigene-rag` 0.0.1 MCP server of
+  [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp), pinned by image digest. Gene table
+  lookups (`get_gene`, `find_genes`) answer what RetiGene curates about a gene and which genes meet
+  conditions, with exact lists and counts and no model call: with Claude Haiku, 27 questions asked
+  twice scored 53 of 54, against 16 of 54 from searching the papers alone. For what the papers say:
+  keyword search over every sentence, embedding search over passages, and a corpus-wide curation that
+  grades each gene from its own sentences with verbatim quotes, PMIDs and pages (ten runs listed the
+  curator's 15 A genes as A, at $0.31-0.39 and 2.5-3.5 min per question with Claude Haiku). It needs
+  no secret of its own: the model comes from whoever runs the server. It comes with the trigger evals
+  `list-haploinsufficient-genes-in-retigene` and `list-genes-by-retigene-table-conditions`.
+
 ## [0.2.8] - 2026-11-16
 
 ### Fixed
