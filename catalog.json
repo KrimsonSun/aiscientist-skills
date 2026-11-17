@@ -1,12 +1,16 @@
 {
   "schema_version": 1,
   "registry": "aiscientist-skills",
-  "registry_version": "0.2.0",
-  "generator": "aiscientist-skills 0.2.0",
+  "registry_version": "0.2.8",
+  "generator": "aiscientist-skills 0.2.8",
   "categories": [
     {
       "name": "crispr-screens",
       "description": "Pooled CRISPR screens with a single-cell readout (Perturb-seq): escaping cells, per-perturbation differential expression and effect sizes."
+    },
+    {
+      "name": "knowledge-graph",
+      "description": "Biomedical knowledge graphs: resolving entities, reading typed relationships with their evidence and provenance, and finding datasets to analyze."
     },
     {
       "name": "literature",
@@ -15,6 +19,10 @@
     {
       "name": "single-cell",
       "description": "Single-cell and single-nucleus RNA-seq: QC, integration, annotation and downstream analysis."
+    },
+    {
+      "name": "utilities",
+      "description": "Scientific data triage and deterministic conceptual figures through configured analysis services."
     },
     {
       "name": "variants",
@@ -114,12 +122,47 @@
       "has_tests": true
     },
     {
+      "name": "answer-eye-questions-with-visionkb-kg",
+      "category": "knowledge-graph",
+      "path": "skills/knowledge-graph/answer-eye-questions-with-visionkb-kg",
+      "version": "0.0.1",
+      "status": "community",
+      "description": "Answer chat-style knowledge questions about eye genes, cell types, diseases and datasets from the VisionKB knowledge graph through its read-only HTTP API or the equivalent visionkb-kg MCP tools, citing the KG release and dataset versions. Resolves a gene or cell type to a CURIE, reads per-class and per-cell-type expression from the HECA atlas summaries, reads typed Biolink relationships with knowledge_level, sources and PMIDs, opens the evidence behind an edge, and finds atlases with ready bind records, keeping atlas observations apart from curated claims. Use for questions such as which retinal cell types express LRAT, which class has the highest RHO, which diseases and PMIDs are recorded for PRPF31, or which atlases contain RPE cells. Not for new analysis of cell-level data.",
+      "tags": [
+        "knowledge-graph",
+        "biolink",
+        "gene-expression",
+        "retina",
+        "eye",
+        "cell-atlas",
+        "disease-genes",
+        "provenance",
+        "rest-api",
+        "mcp"
+      ],
+      "license": "MIT",
+      "tested_with": "visionkb-api 0.1.1 (image digest sha256:5d956d03...), visionkb-deploy 0.1.1, KG release visionkb-2026.11.0, Neo4j 2026.10.1 Community, PostgreSQL 17.11, httpx 0.28.1, Python 3.13.18, curl 8.23.0, jq 1.8.2",
+      "author": "Jin Li",
+      "requirements": {
+        "compute": "none on the client: the four worked questions (roughly 100 HTTP requests, most of them evidence lookups) took 8-18 s wall (four runs) against a stack on the same node; the server stack used 4 GB Neo4j heap and 8 GB page cache",
+        "gpu": false,
+        "scheduler": "none",
+        "network": "runtime",
+        "secrets": [
+          "VISIONKB_API_TOKEN_FILE"
+        ],
+        "allowed_tools": ""
+      },
+      "has_code": true,
+      "has_tests": true
+    },
+    {
       "name": "query-retigene-papers-with-aiscientist-mcp",
       "category": "literature",
       "path": "skills/literature/query-retigene-papers-with-aiscientist-mcp",
       "version": "0.0.1",
       "status": "community",
-      "description": "Answer a question about the RetiGene papers (about 1,700 full-text papers on inherited retinal disease), such as \"What are haploinsufficient genes in RetiGene papers?\", by calling the retigene-rag MCP server from the aiscientist-mcp repository. Its tools search every sentence by keyword and the passages by chunk embedding, and run a corpus-wide curation that grades each gene from its own sentences (A stated, B hedged or contested, N not supported) into a gene table and a sentence table, each row with a verbatim quote, PMID and page. Use when asked which genes in the RetiGene papers have a property (haploinsufficiency, loss of one copy), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.",
+      "description": "Answer a question about inherited retinal disease genes from RetiGene, by calling the retigene-rag MCP server of the aiscientist-mcp repository. Its tools look genes up in the RetiGene gene table (status, inheritance, phenotype and functional categories, diseases, expression, key papers; exact lists and counts), search the RetiGene papers (about 1,700 full texts) by keyword and by embedding, and run a corpus-wide curation that grades each gene from its own sentences, each row with a verbatim quote, PMID and page. Use when asked what RetiGene records about a gene, which genes meet conditions (\"autosomal dominant LCA genes\"), which genes the RetiGene papers report with a property (\"What are haploinsufficient genes in RetiGene papers?\"), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.",
       "tags": [
         "literature",
         "rag",
@@ -131,12 +174,37 @@
         "claude"
       ],
       "license": "MIT",
-      "tested_with": "aiscientist-mcp common 0.0.2 and retigene-rag 0.0.1 (pip, and the image of containers/retigene-rag), mcp 2.3.0, anthropic 1.13.0, Python 3.13.3, Claude Haiku 5.5 and Claude Sonnet 5.5, Claude Code 2.1.205; the RetiGene index of 2026-10-11 (1,736 papers, 426,706 sentences)",
+      "tested_with": "aiscientist-mcp common 0.0.2 and retigene-rag 0.0.1 (pip, and the image of containers/retigene-rag), mcp 2.3.0, anthropic 1.13.0, Python 3.13.3, Claude Haiku 5.5 and Claude Sonnet 5.5, Claude Code 2.1.205; the RetiGene index of 2026-10-11 (1,736 papers, 426,706 sentences) and the RetiGene gene table v1.15 (779 records)",
       "author": "Yijun Sun",
       "requirements": {
-        "compute": "one curation: 2.5-3.5 min, 711-770 model calls, 2.2-2.4 M input and 0.45-0.49 M output tokens, $0.31-0.39 with Claude Haiku reading and reviewing ($0.78 with a Claude Sonnet review); asked again it is reused at once, and with rerun it takes 17 s from the reply cache; other calls 2-15 s each as one-shot CLI or container calls, most of it loading the corpus (about 2 GB of memory); no GPU",
+        "compute": "one curation: 2.5-3.5 min, 711-770 model calls, 2.2-2.4 M input and 0.45-0.49 M output tokens, $0.31-0.39 with Claude Haiku reading and reviewing ($0.78 with a Claude Sonnet review); asked again it is reused at once, and with rerun it takes 17 s from the reply cache; a gene table lookup answers in one call (27 questions asked twice with Claude Haiku: 53 of 54 correct, the 44 table questions in about 2 turns each); other calls 2-15 s each as one-shot CLI or container calls, most of it loading the corpus (about 2 GB of memory); no GPU",
         "gpu": false,
         "scheduler": "none",
+        "network": "runtime",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
+      "name": "read-evidence-with-mcp",
+      "category": "literature",
+      "path": "skills/literature/read-evidence-with-mcp",
+      "version": "0.1.2",
+      "status": "community",
+      "description": "Search citations, retrieve local corpus passages, answer with PaperQA or curate grounded gene evidence through an already configured literature MCP service. Use when that service and the required corpus/model are available and task coverage, citations and partial results must be tracked; retain current retrieval tools when the MCP service is absent.",
+      "tags": [
+        "mcp",
+        "literature"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-literature 0.0.4, common 0.0.4; bounded complete-result resources verified by local real MCP protocol tests; final image and website acceptance pending; predecessor has public search, retrieval and cited-answer evidence",
+      "author": "",
+      "requirements": {
+        "compute": "Public search and local retrieval tested; model answer/curation resources depend on the configured deployment",
+        "gpu": false,
+        "scheduler": "optional",
         "network": "runtime",
         "secrets": [],
         "allowed_tools": ""
@@ -201,6 +269,56 @@
         "gpu": false,
         "scheduler": "none",
         "network": "runtime",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
+      "name": "analyze-scrna-with-mcp",
+      "category": "single-cell",
+      "path": "skills/single-cell/analyze-scrna-with-mcp",
+      "version": "0.1.4",
+      "status": "community",
+      "description": "Run QC, clustering, differential expression, enrichment and marker annotation through an already configured scrna-analysis MCP service. Use for an AnnData workflow when this service is available and its checkpoints and asynchronous task results must be carried between steps; retain the existing standalone workflow when it is not registered.",
+      "tags": [
+        "mcp",
+        "scrna-analysis"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-scrna-analysis 0.0.5 (0.0.6 changes only bare-name checkpoint lookup, unit-tested), common 0.0.4; frozen scientific Python 3.11.15 and Scanpy 1.11.5; released SIF CLI/schema/file verification and full native HPC regression passed; website acceptance is separate",
+      "author": "",
+      "requirements": {
+        "compute": "4 CPUs, 48 GB requested; 480 real cells x 1550 genes, 6 samples, 2 tissue regions; this is a regression subset, not full-atlas sizing",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "install",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
+      "name": "annotate-cells-with-scgpt-mcp",
+      "category": "single-cell",
+      "path": "skills/single-cell/annotate-cells-with-scgpt-mcp",
+      "version": "0.1.1",
+      "status": "community",
+      "description": "Transfer cell labels from an approved reference model through an already configured scgpt-annotation MCP service. Use for GPU inference on an AnnData query when the validated harness and model are staged, then check predictions against independent structure and markers; do not substitute it for a marker-only annotation or assume the service is installed.",
+      "tags": [
+        "mcp",
+        "scgpt-annotation"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-scgpt-annotation 0.0.3, common 0.0.4, torch 2.3.0, scGPT 0.2.4, scanpy 1.11.5, anndata 0.11.4; real GPU old/new parity on 480 HECA cells",
+      "author": "",
+      "requirements": {
+        "compute": "NVIDIA V100 or A30, 4 CPUs, 48 GB requested; 480 cells x 36601 genes; final-image V100 inference 42.5 seconds; earlier A30 validation 40.8 seconds",
+        "gpu": true,
+        "scheduler": "optional",
+        "network": "install",
         "secrets": [],
         "allowed_tools": ""
       },
@@ -385,6 +503,31 @@
       "has_tests": true
     },
     {
+      "name": "qc-cellranger-with-mcp",
+      "category": "single-cell",
+      "path": "skills/single-cell/qc-cellranger-with-mcp",
+      "version": "0.1.2",
+      "status": "community",
+      "description": "Run ambient correction, filtering and doublet removal through an already configured CellQC MCP service for raw and filtered Cell Ranger deliveries. Use when this service is present and QC checkpoints must feed another analysis service; keep the standalone CellQC method for deployments without the MCP service.",
+      "tags": [
+        "mcp",
+        "cellqc"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-cellqc 0.0.5, common 0.0.4; image and default Docker CLI smoke; frozen CellQC 0.3.6 environment; strict cohort parity and website acceptance pending",
+      "author": "",
+      "requirements": {
+        "compute": "Service default: 16 CPUs, 80 GB, 8 hours; size the real cohort separately",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "install",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
       "name": "qc-snrna-with-cellqc-standalone",
       "category": "single-cell",
       "path": "skills/single-cell/qc-snrna-with-cellqc-standalone",
@@ -442,6 +585,56 @@
       },
       "has_code": true,
       "has_tests": true
+    },
+    {
+      "name": "inspect-data-and-draw-schematics-with-mcp",
+      "category": "utilities",
+      "path": "skills/utilities/inspect-data-and-draw-schematics-with-mcp",
+      "version": "0.1.1",
+      "status": "community",
+      "description": "Inspect an admitted data file and render a conceptual Graphviz schematic through an already configured data-utilities MCP service. Use for bounded format/metadata triage or a reproducible workflow figure with that service; do not use schematics as data plots or assume an unregistered MCP tool exists.",
+      "tags": [
+        "mcp",
+        "data-utilities"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-data-utilities 0.0.2, common 0.0.4, MCP 2.3.0, Python 3.14.3, Graphviz 2.44.0; real 1.35 GB HECA file and original PNG parity",
+      "author": "",
+      "requirements": {
+        "compute": "1 CPU, 4 GB requested; bounded inspection 12.9 seconds, schematic 0.5 seconds in the tested allocation",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "runtime",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
+    },
+    {
+      "name": "annotate-vcf-with-mcp",
+      "category": "variants",
+      "path": "skills/variants/annotate-vcf-with-mcp",
+      "version": "0.1.2",
+      "status": "community",
+      "description": "Annotate an admitted VCF through an already configured variant-annotation MCP service using matching offline VEP references, then inspect complete consequence, frequency and ClinVar tables. Use for this service deployment and its asynchronous results; retain the existing VCF workflow when it is unavailable and never silently switch private variants to REST.",
+      "tags": [
+        "mcp",
+        "variant-annotation"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-variant-annotation 0.0.2 (0.0.3 adds reference contigs to contig-less headers and starts SpliceAI with its env interpreter; unit-tested and patched-0.0.2 Slurm run), common 0.0.4; native MCP and deterministic VEP/bcftools regression fixtures; release-112.0 VEP image build",
+      "author": "",
+      "requirements": {
+        "compute": "Service default: 8 CPUs, 32 GB, 8 hours; reference downloads and real callset acceptance are deployment-specific",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "runtime",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
     },
     {
       "name": "build-variant-db-with-tiledbvcf",
@@ -564,6 +757,31 @@
       },
       "has_code": true,
       "has_tests": true
+    },
+    {
+      "name": "rank-phenotype-differentials-with-mcp",
+      "category": "variants",
+      "path": "skills/variants/rank-phenotype-differentials-with-mcp",
+      "version": "0.1.2",
+      "status": "community",
+      "description": "Map clinical phenotype text to grounded HPO terms and rank a research differential through an already configured phenotype-diagnosis MCP service with LIRICAL and optional literature adjudication. Use for explicit service-based analysis while preserving negation, uncertainty and original probabilities; retain the established workflow when the service is unavailable.",
+      "tags": [
+        "mcp",
+        "phenotype-diagnosis"
+      ],
+      "license": "MIT",
+      "tested_with": "aiscientist-mcp-phenotype-diagnosis 0.0.4, common 0.0.4; complete literature evidence verified by local real MCP protocol tests; final image and website acceptance pending; predecessor has synthetic HPO/LIRICAL evidence",
+      "author": "",
+      "requirements": {
+        "compute": "Real staged LIRICAL phenotype-only check: 8621 candidates; input was synthetic, not patient data",
+        "gpu": false,
+        "scheduler": "optional",
+        "network": "runtime",
+        "secrets": [],
+        "allowed_tools": ""
+      },
+      "has_code": false,
+      "has_tests": false
     },
     {
       "name": "write-variant-tables",

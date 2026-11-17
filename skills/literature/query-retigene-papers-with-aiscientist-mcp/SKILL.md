@@ -1,17 +1,17 @@
 ---
 name: query-retigene-papers-with-aiscientist-mcp
-description: Answer a question about the RetiGene papers (about 1,700 full-text papers on inherited retinal disease), such as "What are haploinsufficient genes in RetiGene papers?", by calling the retigene-rag MCP server from the aiscientist-mcp repository. Its tools search every sentence by keyword and the passages by chunk embedding, and run a corpus-wide curation that grades each gene from its own sentences (A stated, B hedged or contested, N not supported) into a gene table and a sentence table, each row with a verbatim quote, PMID and page. Use when asked which genes in the RetiGene papers have a property (haploinsufficiency, loss of one copy), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.
+description: Answer a question about inherited retinal disease genes from RetiGene, by calling the retigene-rag MCP server of the aiscientist-mcp repository. Its tools look genes up in the RetiGene gene table (status, inheritance, phenotype and functional categories, diseases, expression, key papers; exact lists and counts), search the RetiGene papers (about 1,700 full texts) by keyword and by embedding, and run a corpus-wide curation that grades each gene from its own sentences, each row with a verbatim quote, PMID and page. Use when asked what RetiGene records about a gene, which genes meet conditions ("autosomal dominant LCA genes"), which genes the RetiGene papers report with a property ("What are haploinsufficient genes in RetiGene papers?"), what these papers say about a gene, disease or method, or to install or register this server. For another corpus without the server, use read-whole-corpus-with-claude.
 license: MIT
-compatibility: Requires the aiscientist-mcp packages (common, retigene-rag) or the pinned server image, a copy of the RetiGene index (the AiScientist shared dataset retigene, about 440 MB), an MCP client or the bundled CLI client, and a model set in the server's environment (a Claude key or an OpenAI-compatible endpoint; validated on Claude Haiku 5.5). The skill holds no secret. No GPU. Network for the model calls.
+compatibility: Requires the aiscientist-mcp packages (common, retigene-rag) or the pinned server image, a copy of the RetiGene index (about 440 MB) with a RetiGene gene table release for the lookups, an MCP client or the bundled CLI client, and a model set in the server's environment (a Claude key or an OpenAI-compatible endpoint; validated on Claude Haiku 5.5). The skill holds no secret. No GPU. Network for the model calls.
 metadata:
   category: literature
   version: "0.0.1"
   status: community
   author: "Yijun Sun"
   tags: "literature, rag, mcp, retina, inherited-retinal-disease, haploinsufficiency, gene-curation, claude"
-  tested-with: "aiscientist-mcp common 0.0.2 and retigene-rag 0.0.1 (pip, and the image of containers/retigene-rag), mcp 2.3.0, anthropic 1.13.0, Python 3.13.3, Claude Haiku 5.5 and Claude Sonnet 5.5, Claude Code 2.1.205; the RetiGene index of 2026-10-11 (1,736 papers, 426,706 sentences)"
-  compute: "one curation: 2.5-3.5 min, 711-770 model calls, 2.2-2.4 M input and 0.45-0.49 M output tokens, $0.31-0.39 with Claude Haiku reading and reviewing ($0.78 with a Claude Sonnet review); asked again it is reused at once, and with rerun it takes 17 s from the reply cache; other calls 2-15 s each as one-shot CLI or container calls, most of it loading the corpus (about 2 GB of memory); no GPU"
-  image: "docker://ghcr.io/lijinbio/mcp-retigene-rag@sha256:DIGEST"
+  tested-with: "aiscientist-mcp common 0.0.2 and retigene-rag 0.0.1 (pip, and the image of containers/retigene-rag), mcp 2.3.0, anthropic 1.13.0, Python 3.13.3, Claude Haiku 5.5 and Claude Sonnet 5.5, Claude Code 2.1.205; the RetiGene index of 2026-10-11 (1,736 papers, 426,706 sentences) and the RetiGene gene table v1.15 (779 records)"
+  compute: "one curation: 2.5-3.5 min, 711-770 model calls, 2.2-2.4 M input and 0.45-0.49 M output tokens, $0.31-0.39 with Claude Haiku reading and reviewing ($0.78 with a Claude Sonnet review); asked again it is reused at once, and with rerun it takes 17 s from the reply cache; a gene table lookup answers in one call (27 questions asked twice with Claude Haiku: 53 of 54 correct, the 44 table questions in about 2 turns each); other calls 2-15 s each as one-shot CLI or container calls, most of it loading the corpus (about 2 GB of memory); no GPU"
+  image: "docker://ghcr.io/lijinbio/mcp-retigene-rag@sha256:6c8dbb40bb8b08cd9713fe2765074c90a79ceab2e474c37362ea54e974371149"
   cpus: "2"
   mem_gb: "8"
   time_limit: "01:00:00"
@@ -23,8 +23,9 @@ metadata:
 
 # Query the RetiGene papers with the retigene-rag MCP server
 
-The [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp) server `retigene-rag` exposes the
-RetiGene corpus as MCP tools. This skill holds no code and no secret: every step is a tool call, and the
+The [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp) server `retigene-rag` exposes two
+sources as MCP tools: the RetiGene gene table, a curated database of inherited retinal disease genes, and
+the RetiGene corpus, the full text of those genes' key papers. This skill holds no code and no secret: every step is a tool call, and the
 curation reads with the model of whoever runs the server, set by the variables in step 2.
 
 - In an MCP client such as Claude Code, call the tools directly.
@@ -33,10 +34,15 @@ curation reads with the model of whoever runs the server, set by the variables i
 
 The index is the AiScientist shared dataset `retigene`: 1,736 papers with text, 39,563 passages, 426,706
 sentences, the passages' PubMedBERT vectors, the paper manifest and the HGNC table. It is only read, never
-written. Replace every `/path/to/...` with your own values.
+written. The gene lookups read a RetiGene gene table release, `Full_gene_table_v<version>.tsv` from
+https://retigene.erdc.info/, which the server does not ship: put it in the index folder or its
+`gene_table/` folder, or name it with `RETIGENE_GENE_TABLE`. Replace every `/path/to/...` with your own values.
 
 ## When to use
 
+- "Is PRPF31 an established gene, and how is it inherited?", "Which genes cause autosomal dominant LCA?",
+  "How many cilium genes cause RP?": what RetiGene itself curates. `get_gene` and `find_genes` answer from
+  the gene table, exactly and completely, with no model call. Do not search the papers for these.
 - "Which genes in the RetiGene papers are haploinsufficient?" or another list of every gene with a
   dosage property: the curation reads every sentence that states it, not the top-k passages.
 - "What do the RetiGene papers say about PRPF31 / Coats disease / AAV dosing?": search by meaning or by
@@ -62,7 +68,7 @@ pip install mcp==2.3.0 anthropic==1.13.0 numpy
 for t in common-v0.0.2 retigene-rag-v0.0.1; do
   pip install --no-deps --force-reinstall "git+https://github.com/lijinbio/aiscientist-mcp@${t}#subdirectory=packages/${t%-v*}"
 done
-aiscientist-mcp --server retigene-rag-mcp tools   # lists the 10 tools below
+aiscientist-mcp --server retigene-rag-mcp tools   # lists the 12 tools below
 ```
 
 `search_passages` also needs the embedding stack, CPU only:
@@ -76,7 +82,7 @@ one container per call, with the index mounted read-only and `AISCI_EXECUTOR=inl
 ```bash
 docker run --rm -e AISCI_EXECUTOR=inline -e AISCI_DATA_DIR=/work/data -e RETIGENE_INDEX=/index \
   -e ANTHROPIC_API_KEY -v /path/to/datasets/retigene/v2026.11:/index:ro -v /path/to/work:/work \
-  ghcr.io/lijinbio/mcp-retigene-rag@sha256:DIGEST aiscientist-mcp --server retigene-rag-mcp tools
+  ghcr.io/lijinbio/mcp-retigene-rag@sha256:6c8dbb40bb8b08cd9713fe2765074c90a79ceab2e474c37362ea54e974371149 aiscientist-mcp --server retigene-rag-mcp tools
 ```
 
 With apptainer, pull the same digest (`apptainer pull mcp-retigene-rag_0.0.1.sif docker://...`), pass the
@@ -87,6 +93,7 @@ settings as `APPTAINERENV_<name>` and bind the index and the data folder.
 | Variable | Meaning | Tested value |
 | --- | --- | --- |
 | `RETIGENE_INDEX` | a version of the shared dataset `retigene` | `/path/to/datasets/retigene/v2026.11` |
+| `RETIGENE_GENE_TABLE` | a RetiGene gene table release; unset: the highest `Full_gene_table_v*.tsv` in the index folder or its `gene_table/` | unset (v1.15 in `gene_table/`) |
 | `AISCI_DATA_DIR` | data root; curations go to `<root>/retigene-rag/<curation_id>/` | `/path/to/data/aiscientist-mcp` |
 | `AISCI_EXECUTOR` | `inline` (the call returns when the curation ends), `local` (background, for a persistent server) or `slurm` | `inline` |
 | `ANTHROPIC_API_KEY` | your own Claude key, when the model is Claude (`ANTHROPIC_BASE_URL` for a proxy) | your key |
@@ -111,6 +118,8 @@ claude mcp get retigene-rag   # project scope: "Pending approval" until you run 
 
 | Tool | Arguments | Returns | Time (tested) |
 | --- | --- | --- | --- |
+| `get_gene` | `gene` | every record of the symbol: status, inheritance, phenotypes with their inheritance, functions, diseases, expression, key papers and whether each is in the corpus; `found: false` with similar symbols when absent | seconds |
+| `find_genes` | `phenotypes`, `inheritance`, `functions`, `status`, `gene_class`, `cell_type`, `cell_group`, `tissue_expression`, `variant_spectrum`, `disease`, `group_by`, `limit` | every gene meeting all conditions: the count, all symbols, the first `limit` rows; with `group_by`, counts per value | seconds |
 | `search_sentences` | `terms`, `gene`, `limit`, `offset` | every sentence holding a term, as `PMID p c: sentence` lines, with the total | 10 s |
 | `search_passages` | `query`, `terms`, `top_k` | the passages nearest the query by embedding; with `terms`, only passages holding them | 15 s |
 | `read_passage` | `pmid`, `chunk` | the passage with citation, title and DOI | seconds |
@@ -122,7 +131,27 @@ claude mcp get retigene-rag   # project scope: "Pending approval" until you run 
 | `write_report` | `curation_id` | `report.md` with both tables | seconds |
 | `list_curations` | none | `curations` | seconds |
 
-## 5. Ask the haploinsufficiency question
+## 5. Look genes up in the gene table
+
+These calls were run on RetiGene v1.15. Every answer names the release it read.
+
+```bash
+S="aiscientist-mcp --server retigene-rag-mcp"
+$S call get_gene '{"gene": "PRPF31"}'                                    # established, AD, RP, RNA splicing
+$S call find_genes '{"phenotypes": ["LCA"], "inheritance": ["AD"]}'      # every gene, with the exact count
+$S call find_genes '{"functions": ["Cilium"], "group_by": "phenotype"}'  # counts per phenotype category
+```
+
+- Conditions combine with AND. With `phenotypes` and `inheritance` together, each listed phenotype must
+  have each listed mode. `status` is `established` unless you pass `candidate`, `discarded` or `any`.
+- A value the table does not hold is refused, and the error lists the values it does hold: read them and
+  ask again. Inheritance is `AR`, `AD`, `XL` or `MT`.
+- A symbol can have two records (established for one phenotype, a candidate for another), and a few
+  records are loci; both are marked in the answer.
+- A gene's key papers are where a search of the corpus starts, not a filter: in the tested corpus, 37% of
+  the sentences that name a gene are in other genes' papers.
+
+## 6. Ask the haploinsufficiency question
 
 These are the calls of the tested run, in order. In Claude Code they are the tools
 `mcp__retigene-rag__search_sentences`, `..._submit_curation`, and so on, with the same JSON arguments.
@@ -161,11 +190,13 @@ $S call search_passages '{"query": "PRPF31 haploinsufficiency retinitis pigmento
 $S call read_passage '{"pmid": "24419317", "chunk": 0}'
 ```
 
-## 6. Validate before using the output
+## 7. Validate before using the output
 
 Each curation folder `$AISCI_DATA_DIR/retigene-rag/<curation_id>/` holds `genes.csv` (one row per gene),
 `sentences.csv` (one row per sentence read, with its checks), `requests.csv` (what each term found),
-`curation.json` (models, terms, time, calls, tokens, cost) and `report.md`. Check, in this order:
+`curation.json` (models, terms, time, calls, tokens, cost) and `report.md`. For a gene table answer, check
+`release` (the version read) and `total_genes` against the length of `genes`. For a curation check, in
+this order:
 
 1. **Coverage** (`found` in the result): sentences and genes found. A term that finds nothing, or far fewer
    sentences than `search_sentences` showed, means a typo.

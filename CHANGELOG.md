@@ -8,23 +8,128 @@ All notable changes to this repository are documented here. The format follows
 
 ### Added
 
+- `literature/query-retigene-papers-with-aiscientist-mcp` 0.0.1: answers a question about inherited
+  retinal disease genes by calling the `retigene-rag` 0.0.1 MCP server of
+  [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp), pinned by image digest. Gene table
+  lookups (`get_gene`, `find_genes`) answer what RetiGene curates about a gene and which genes meet
+  conditions, with exact lists and counts and no model call: with Claude Haiku, 27 questions asked
+  twice scored 53 of 54, against 16 of 54 from searching the papers alone. For what the papers say:
+  keyword search over every sentence, embedding search over passages, and a corpus-wide curation that
+  grades each gene from its own sentences with verbatim quotes, PMIDs and pages (ten runs listed the
+  curator's 15 A genes as A, at $0.31-0.39 and 2.5-3.5 min per question with Claude Haiku). It needs
+  no secret of its own: the model comes from whoever runs the server. It comes with the trigger evals
+  `list-haploinsufficient-genes-in-retigene` and `list-genes-by-retigene-table-conditions`.
+
+## [0.2.8] - 2026-11-16
+
+### Fixed
+
+- `variants/annotate-vcf-with-mcp` 0.1.2 pins variant-annotation MCP 0.0.3
+  (`ghcr.io/lijinbio/mcp-variant-annotation@sha256:b013f4fcd951…`): a VCF without `##contig` lines is
+  normalized after taking the reference's contigs, and SpliceAI starts from an environment
+  reached at another path (lijinbio/aiscientist-mcp#9). Recorded acceptance evidence refers to 0.0.2.
+
+## [0.2.7] - 2026-11-15
+
+### Fixed
+
+- `single-cell/analyze-scrna-with-mcp` 0.1.4 pins scrna-analysis MCP 0.0.6
+  (`ghcr.io/lijinbio/mcp-scrna-analysis@sha256:f979615ed1ed…`), in which a bare `input` name finds
+  a checkpoint handed off by another analysis of the same run (lijinbio/aiscientist-mcp#7).
+  The scientific stack is unchanged from 0.0.5; recorded acceptance evidence refers to 0.0.5.
+
+## [0.2.6] - 2026-11-13
+
+### Changed
+
+- The seven native MCP skills pin the upstream `ghcr.io/lijinbio/mcp-*` release images
+  instead of the contributor's fork validation images, each with a patch version bump:
+  `literature/read-evidence-with-mcp` 0.1.2 (`mcp-literature@sha256:05ab531fb89a…`);
+  `single-cell/analyze-scrna-with-mcp` 0.1.3 (`mcp-scrna-analysis@sha256:1c978c154071…`);
+  `single-cell/annotate-cells-with-scgpt-mcp` 0.1.1 (`mcp-scgpt-annotation@sha256:7ee18dc0df9f…`);
+  `single-cell/qc-cellranger-with-mcp` 0.1.2 (`mcp-cellqc@sha256:d0f456eb4c76…`);
+  `utilities/inspect-data-and-draw-schematics-with-mcp` 0.1.1 (`mcp-data-utilities@sha256:e3afbd62473f…`);
+  `variants/annotate-vcf-with-mcp` 0.1.1 (`mcp-variant-annotation@sha256:a1861a81a36d…`);
+  `variants/rank-phenotype-differentials-with-mcp` 0.1.2 (`mcp-phenotype-diagnosis@sha256:d20ed2dc2e57…`).
+  The upstream images are built by the release workflow from the same source tree as the
+  validated fork builds (`5981cc7`); recorded acceptance evidence refers to the fork builds.
+- First upstream release of the 0.2.2–0.2.5 changes, which were published only as fork
+  validation prereleases.
+
+## [0.2.5] - 2026-11-13
+
+### Fixed
+
+- Literature and phenotype MCP skills 0.1.1 pin the published 0.0.4 images.
+  Complete literature evidence is transferred through bounded MCP resources with
+  identity, size, offset and SHA-256 checks. Local real-protocol tests passed;
+  released-image and selected-session website gates remain pending. The earlier
+  website LIRICAL-only result is retained as failed literature-adjudication evidence.
+- `single-cell/analyze-scrna-with-mcp` 0.1.2 records the now-passing final 0.0.5
+  native HPC regression. Its image pin is unchanged; website acceptance remains
+  separate. Historical 0.2.4 pending-test provenance is preserved.
+
+## [0.2.4] - 2026-11-13
+
+### Fixed
+
+- `single-cell/analyze-scrna-with-mcp` 0.1.1 pins the published scRNA MCP 0.0.5 image.
+  Its provenance records the frozen Scanpy 1.11.5 scientific stack, explicit
+  `deployed-auto-combat-v1` default policy, optional explicit Harmony, and private
+  nullable-metadata normalization. Released SIF CLI/schema/file verification passed;
+  full native and website acceptance remain separate pending gates. Earlier
+  same-environment algorithm parity is not presented as old-environment equivalence.
+  No other skill image changes in this registry release.
+
+## [0.2.3] - 2026-11-13
+
+### Fixed
+
+- `single-cell/qc-cellranger-with-mcp` 0.1.1 pins the published CellQC MCP 0.0.5 image
+  by its release digest. It retains the frozen scientific environment from 0.0.4 and
+  fixes default Docker entry-point activation. The skill distinguishes the passing
+  image/CLI smoke from still-pending strict full-cohort parity and website acceptance.
+  No other skill image changes in this registry release.
+
+## [0.2.2] - 2026-11-12
+
+### Added
+
+- Seven community, instruction-only MCP migration skills for scRNA analysis, CellQC, scGPT,
+  literature, variant annotation, phenotype ranking and data utilities, with trigger evals.
+  They require an actually registered service, preserve existing standalone/legacy workflows,
+  distinguish real and synthetic acceptance evidence, and pin published fork validation images
+  with explicit CPU, memory and time requests. Registration and trusted reference/model settings
+  remain deployment configuration; these preview pins do not change existing production tools.
+- The `utilities` category for bounded dataset inspection and deterministic schematic rendering.
+
+### Fixed
+
+- `single-cell/explore-atlas-expression-with-aiscientist-mcp`: use AiScientist's typed MCP
+  tools and `atlas_write_report` for the query report. Standalone MCP and CLI clients retain
+  the server's `write_report` name; dataset binding, execution settings and artifact collection
+  are supplied by the AiScientist bridge.
+
+## [0.2.1] - 2026-11-10
+
+### Added
+
+- `knowledge-graph/answer-eye-questions-with-visionkb-kg` 0.0.1, instruction only, and the
+  `knowledge-graph` category (plugin entry and CODEOWNERS line): answers knowledge questions about
+  eye genes, cell types, diseases and datasets with the read-only VisionKB API (entities, atlas
+  summaries, typed Biolink relationships with `knowledge_level`, evidence, datasets with bind
+  records), and names the equivalent `visionkb-kg` MCP tools. It states the expression-edge rule,
+  the ambient-RNA and doublet caveats (known issue KI-1) and that a missing edge is not evidence of
+  non-expression. `scripts/vkb_client.py` pages by rows received (the API trims pages to its
+  character cap) and labels single pages `complete`, `partial` or `trimmed: n of total`, with tests
+  against a fake trimming API. Tested on the KG release `visionkb-2026.11.0` served by
+  visionkb-api 0.1.1. It comes with the trigger eval `ask-eye-knowledge-graph-expression-and-disease`.
 - `literature/read-whole-corpus-with-claude` 0.0.1: answers a question from a chunked full-text
   corpus by having Claude Haiku read every passage, ten per call, as numbered sentences, and keep
   the sentences that bear on it (verbatim, with PMID and page). `scripts/read_corpus.py` estimates
   the cost before a read, resumes a read that stopped, and builds a table of every HGNC gene the
   evidence names for a gene-list question. Tested on the RetiGene corpus (39,563 passages). It
   comes with the trigger eval `list-every-gene-from-paper-corpus`.
-
-- `literature/query-retigene-papers-with-aiscientist-mcp` 0.0.1: answers a question about the
-  RetiGene papers, such as "What are haploinsufficient genes in RetiGene papers?", by calling the
-  `retigene-rag` MCP server of [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp): keyword
-  search over every sentence, embedding search over passages, and a corpus-wide curation that grades
-  each gene from its own sentences into a gene table and a sentence table with verbatim quotes, PMIDs
-  and pages. Only install, registration and tool calls, with tested times and costs: in ten runs it
-  listed the curator's 15 A genes as A, kept the 7 B genes apart and listed neither N gene, at
-  $0.31-0.39 and 2.5-3.5 min per question with Claude Haiku. It needs no secret of its own: the
-  model, and its key or endpoint, come from whoever runs the server. It comes with the trigger eval
-  `list-haploinsufficient-genes-in-retigene`.
 
 ## [0.2.0] - 2026-11-04
 

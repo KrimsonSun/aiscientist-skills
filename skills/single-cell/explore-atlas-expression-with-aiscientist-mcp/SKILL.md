@@ -27,7 +27,8 @@ The [aiscientist-mcp](https://github.com/lijinbio/aiscientist-mcp) server
 `atlas-expression-exploration` exposes the gene-expression query as MCP tools. This skill holds no
 analysis code: every step is a tool call.
 
-- In an MCP client such as Claude Code, call the tools directly.
+- In AiScientist, use the typed tools in [On AiScientist](#on-aiscientist).
+- In another MCP client such as Claude Code, call the server's tools directly.
 - In a shell or batch script, use the bundled client:
   `aiscientist-mcp --server atlas-expression-exploration-mcp call <tool> '<json>'`.
 
@@ -35,7 +36,7 @@ Only one step is expensive. `submit_query` loads the whole atlas into memory on 
 as a Slurm job, and writes a small `query.h5ad` (all cells, query genes only) plus the tables.
 The plot and report tools read only that file.
 
-Tested end to end, as written, on the Human Retina Cell Atlas snRNA-seq object:
+The server was tested end to end on the Human Retina Cell Atlas snRNA-seq object:
 
 - 3,177,310 nuclei x 36,601 genes, raw counts in `X` (CSR, 8.30e9 non-zeros, 19.5 GB gzip h5ad);
 - 10 major classes, 123 cell types, 3 retinal regions, 104 donor labels.
@@ -76,18 +77,31 @@ The atlas is only read, never written.
 
 ## On AiScientist
 
-AiScientist has no MCP client yet. Its `run_in_environment` runs commands in the image of
-`metadata.image` (the server image above, pinned by digest) with the `cpus`, `mem_gb` and
-`time_limit` of this skill. Each call is a fresh container, so:
+AiScientist's pinned MCP bridge exposes typed tools when this skill is installed and allowed,
+its image matches the server's digest pin, and the deployment has an approved atlas configured.
+Attach that atlas or its authorized session copy, then call:
 
-- set `AISCI_EXECUTOR=inline`, `ATLAS_H5AD` and `AISCI_DATA_DIR` (§2); `submit_query` then runs the
-  full-atlas step inside that container and returns when it ends;
-- run the §5 calls with `S="aiscientist-mcp --server atlas-expression-exploration-mcp"`;
-- copy the figures, `summary_*.tsv`, `gene_resolution.tsv` and `report.md` from the query folder
-  into `$AISCIENTIST_ARTIFACTS/gene_expression/<query_id>/`.
+`resolve_genes` → `submit_query` → `query_status` → `get_summary`, `plot_dotplot`,
+`plot_violin`, `plot_featureplot` → `atlas_write_report(query_id)`.
 
-The image with `inline` and one container per call was tested with apptainer (§1, Container); a
-run inside AiScientist itself has not been tested yet.
+Use the returned `query_id` for results and report calls. `list_queries` lists previous queries
+in this run. `atlas_write_report` is the AiScientist name for the server's `write_report` tool;
+it creates the query's `report.md`. AiScientist's separate `write_report` plan step requests the
+whole run's manuscript. Use `atlas_write_report` for the Atlas query report. The generic MCP
+and CLI examples below retain the server's name `write_report`.
+
+The bridge supplies the approved dataset mount, `ATLAS_H5AD`, `AISCI_DATA_DIR`,
+`AISCI_EXECUTOR=inline`, job resources and artifact collection. Pass `genes` unchanged; if
+specifying `atlas`, use the attached dataset or its authorized source. The bridge validates
+that path and omits it from the MCP arguments so the server reads the bound session copy.
+`submit_query` finishes inside its outer CPU allocation before returning. Figures,
+`summary_*.tsv`, `gene_resolution.tsv` and `report.md` appear in the run's
+`gene_expression/<query_id>/` artifacts.
+
+Direct `run_in_environment` shell calls for this skill are refused. If the typed tools are
+unavailable, check the deployed bridge, skill/image binding and approved atlas configuration.
+The installation, environment and client setup in §§1–3 below are for standalone clients;
+AiScientist supplies those settings through its deployment.
 
 ## 1. Install the server
 

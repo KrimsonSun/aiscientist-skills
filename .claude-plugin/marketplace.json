@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Tested, reproducible agent skills for scientific data analysis, used by AiScientist.",
-    "version": "0.2.0"
+    "version": "0.2.8"
   },
   "plugins": [
     {
@@ -28,12 +28,15 @@
       "homepage": "https://lijinbio.github.io/aiscientist-skills/",
       "repository": "https://github.com/lijinbio/aiscientist-skills",
       "skills": [
+        "./skills/single-cell/analyze-scrna-with-mcp",
+        "./skills/single-cell/annotate-cells-with-scgpt-mcp",
         "./skills/single-cell/annotate-clusters-by-markers",
         "./skills/single-cell/compare-conditions-by-celltype",
         "./skills/single-cell/compare-two-groups-with-scanpy",
         "./skills/single-cell/crossvalidate-scgpt-vs-leiden",
         "./skills/single-cell/explore-atlas-expression-with-aiscientist-mcp",
         "./skills/single-cell/prioritize-disease-genes-with-atlas",
+        "./skills/single-cell/qc-cellranger-with-mcp",
         "./skills/single-cell/qc-snrna-with-cellqc-standalone",
         "./skills/single-cell/score-gene-signatures-with-scanpy"
       ]
@@ -81,10 +84,12 @@
       "homepage": "https://lijinbio.github.io/aiscientist-skills/",
       "repository": "https://github.com/lijinbio/aiscientist-skills",
       "skills": [
+        "./skills/variants/annotate-vcf-with-mcp",
         "./skills/variants/build-variant-db-with-tiledbvcf",
         "./skills/variants/normalize-vcf-with-bcftools",
         "./skills/variants/prioritize-clinical-variants",
         "./skills/variants/qc-vcf-callset",
+        "./skills/variants/rank-phenotype-differentials-with-mcp",
         "./skills/variants/write-variant-tables"
       ]
     },
@@ -108,8 +113,49 @@
       "repository": "https://github.com/lijinbio/aiscientist-skills",
       "skills": [
         "./skills/literature/query-retigene-papers-with-aiscientist-mcp",
+        "./skills/literature/read-evidence-with-mcp",
         "./skills/literature/read-whole-corpus-with-claude",
         "./skills/literature/recover-paper-pdfs"
+      ]
+    },
+    {
+      "name": "knowledge-graph",
+      "description": "Biomedical knowledge graphs: resolving entities, reading typed relationships with their evidence and provenance, and finding datasets to analyze.",
+      "source": "./",
+      "strict": false,
+      "category": "science",
+      "keywords": [
+        "knowledge-graph",
+        "biolink",
+        "ontology",
+        "gene-expression"
+      ],
+      "author": {
+        "name": "Jin Li"
+      },
+      "license": "MIT",
+      "homepage": "https://lijinbio.github.io/aiscientist-skills/",
+      "repository": "https://github.com/lijinbio/aiscientist-skills",
+      "skills": [
+        "./skills/knowledge-graph/answer-eye-questions-with-visionkb-kg"
+      ]
+    },
+    {
+      "name": "utilities",
+      "description": "Scientific data triage and deterministic conceptual figures through configured analysis services.",
+      "source": "./",
+      "strict": false,
+      "category": "science",
+      "keywords": [
+        "data-inspection",
+        "graphviz",
+        "mcp"
+      ],
+      "license": "MIT",
+      "homepage": "https://lijinbio.github.io/aiscientist-skills/",
+      "repository": "https://github.com/lijinbio/aiscientist-skills",
+      "skills": [
+        "./skills/utilities/inspect-data-and-draw-schematics-with-mcp"
       ]
     }
   ]
